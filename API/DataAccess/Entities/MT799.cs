@@ -2,10 +2,17 @@
 {
     public class MT799
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         //for testing database, will be changed for the code below at a later stage
         public string Message { get; set; }
+
+        public MT799() { }
+        public MT799(int id, string message)
+        {
+            Id = id;
+            Message = message;
+        }
 
 
         ////MT799 Block 1
