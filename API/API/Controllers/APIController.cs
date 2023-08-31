@@ -1,9 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using System.Text;
 
 namespace API.Controllers
@@ -18,11 +15,10 @@ namespace API.Controllers
             context = _context;
         }
 
-
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet] 
+        public async Task<IActionResult> Get()
         {
-            return Ok("Hello, World!");
+            return Ok();
         }
 
         [HttpPost]
@@ -33,11 +29,23 @@ namespace API.Controllers
                 using (StreamReader reader = new StreamReader(file.OpenReadStream(), Encoding.UTF8))
                 {
                     string content = await reader.ReadToEndAsync();
+                    content = content.Replace("}", string.Empty);
                     MT799 mt799 = new MT799();
-                    mt799.Message = content;
+
+                    List<string> list = new List<string>();
+                    list = content.Split('{', StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                    List<string> blocks = new List<string>();
+
+                    //ignore first 
+                    blocks = list[2].Split("\n:").ToList();
+
+                    mt799.Block1 = blocks[1];
+                    mt799.Block2 = blocks[2];
+                    mt799.Block3 = blocks[3];
 
 
-                    //get last message what if its the first message?
+
                     mt799.Id = await context.GetCount() + 1;
 
                     await context.InsertMessage(mt799);

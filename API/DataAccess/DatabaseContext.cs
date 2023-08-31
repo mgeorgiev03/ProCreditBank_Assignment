@@ -15,7 +15,7 @@ namespace DataAccess
             {
                 await connection.OpenAsync();
 
-                string query = "CREATE TABLE IF NOT EXISTS MESSAGES (MessageId INTEGER AUTO_INCREMENT PRIMARY KEY, strMessage TEXT)";
+                string query = "CREATE TABLE IF NOT EXISTS MESSAGES (MessageId INTEGER AUTO_INCREMENT PRIMARY KEY, block1 TEXT, block2 TEXT, block3 TEXT)";
                 using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                 {
                     await cmd.ExecuteNonQueryAsync();
@@ -38,12 +38,14 @@ namespace DataAccess
                     isDbCreated = true;
                 }
 
-                string query = "INSERT INTO MESSAGES (MessageId, strMessage) VALUES (@Value1, @Value2)";
+                string query = "INSERT INTO MESSAGES (MessageId, block1, block2, block3) VALUES (@Value1, @Value2, @Value3, @Value4)";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@Value1", message.Id);
-                    cmd.Parameters.AddWithValue("@Value2", message.Message);
+                    cmd.Parameters.AddWithValue("@Value2", message.Block1);
+                    cmd.Parameters.AddWithValue("@Value3", message.Block2);
+                    cmd.Parameters.AddWithValue("@Value4", message.Block3);
                     await cmd.ExecuteNonQueryAsync();
                 }
 
@@ -70,7 +72,9 @@ namespace DataAccess
                     {
                         while (await reader.ReadAsync())
                         {
-                            messageFromDb.Message = reader.GetString(0);
+                            messageFromDb.Block1 = reader.GetString(0);
+                            messageFromDb.Block2 = reader.GetString(1);
+                            messageFromDb.Block3 = reader.GetString(2);
                         }
 
                         await reader.CloseAsync();
@@ -97,7 +101,7 @@ namespace DataAccess
                     using (SQLiteDataReader reader = (SQLiteDataReader)await cmd.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
-                            messages.Add(new MT799(reader.GetInt32(0), reader.GetString(1)));
+                            messages.Add(new MT799(reader.GetInt32(0), reader.GetString(1), reader.GetString(2), reader.GetString(3)));
 
                         reader.Close();
                     }
@@ -150,12 +154,14 @@ namespace DataAccess
             {
                 await connection.OpenAsync();
 
-                string query = "Update Messages Set strMessage = @Value2 Where MessageId = @Value1";
+                string query = "Update Messages Set block1 = @Value2, block2 = @Value3, block3 = @Value4 Where MessageId = @Value1";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(query, connection))
                 {
                     cmd.Parameters.AddWithValue("@Value1", message.Id);
-                    cmd.Parameters.AddWithValue("@Value2", message.Message);
+                    cmd.Parameters.AddWithValue("@Value2", message.Block1);
+                    cmd.Parameters.AddWithValue("@Value3", message.Block2);
+                    cmd.Parameters.AddWithValue("@Value4", message.Block3);
                     await cmd.ExecuteNonQueryAsync();
                 }
 
