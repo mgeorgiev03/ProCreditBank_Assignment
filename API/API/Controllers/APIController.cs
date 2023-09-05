@@ -10,9 +10,12 @@ namespace API.Controllers
     public class APIController : ControllerBase
     {
         private DatabaseContext context;
-        public APIController(DatabaseContext _context)
+        private readonly ILogger<APIController> logger;
+        
+        public APIController(DatabaseContext _context, ILogger<APIController> _logger)
         {
             context = _context;
+            logger = _logger;
         }
 
         [HttpGet] 
@@ -24,7 +27,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(IFormFile file)
         {
-            if (file != null && file.Length > 0)
+            try
             {
                 using (StreamReader reader = new StreamReader(file.OpenReadStream(), Encoding.UTF8))
                 {
@@ -37,14 +40,11 @@ namespace API.Controllers
 
                     List<string> blocks = new List<string>();
 
-                    //ignore first 
                     blocks = list[2].Split("\n:").ToList();
 
                     mt799.Block1 = blocks[1];
                     mt799.Block2 = blocks[2];
                     mt799.Block3 = blocks[3];
-
-
 
                     mt799.Id = await context.GetCount() + 1;
 
@@ -52,10 +52,15 @@ namespace API.Controllers
                 }
 
                 return Ok();
-            }
 
-            else
+            }
+            catch (Exception ex)
+            {
+                //logger.Log(LogLevel.Error, ex, ex.Message);
+                logger.LogError(ex, ex.Message);
+
                 return BadRequest();
+            }
 
         }
     }

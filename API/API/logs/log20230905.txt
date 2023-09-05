@@ -1,0 +1,2 @@
+{"@t":"2023-09-05T16:09:25.0829289Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["18.4788"],"RequestMethod":"GET","RequestPath":"/api","StatusCode":200,"Elapsed":18.4788,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware"}
+{"@t":"2023-09-05T16:09:45.8995422Z","@mt":"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms","@r":["0.1173"],"RequestMethod":"POST","RequestPath":"/api","StatusCode":415,"Elapsed":0.1173,"SourceContext":"Serilog.AspNetCore.RequestLoggingMiddleware"}
