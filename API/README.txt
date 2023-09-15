@@ -1,0 +1,1 @@
+The documentation is recommended to be viewed with markdown viewer such as Visual Studio code with the Markdown All in One extension and then pressing CTRL + Shift + V should open a preview of the file   

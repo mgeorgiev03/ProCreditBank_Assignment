@@ -56,7 +56,6 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                //logger.Log(LogLevel.Error, ex, ex.Message);
                 logger.LogError(ex, ex.Message);
 
                 return BadRequest();
